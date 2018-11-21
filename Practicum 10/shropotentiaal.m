@@ -1,7 +1,7 @@
-function shropotentiaal(U)
+function shropotentiaal(V,A,D)
+%A geeft de positie van de linkerzijde van de potentiaalberg, D de dikte
 %  schro - Program to solve the Schrodinger equation 
 %  for a free particle using the Crank-Nicolson scheme
-% clear all;  help schro;   % Clear memory and print header
 
 %* Initialize parameters (grid spacing, time step, etc.)
 i_imag = sqrt(-1);    % Imaginary i
@@ -10,7 +10,7 @@ L = 100;              % System extends from -L/2 to L/2
 h = L/(N-1);          % Grid size
 x = h*(0:N-1) - L/2;  % Coordinates  of grid points
 h_bar = 1;  mass = 1; % Natural units
-tau = 1;
+tau = 0.1;
 
 %* Set up the Hamiltonian operator matrix
 ham = zeros(N);  % Set all elements to zero
@@ -23,19 +23,16 @@ end
 % First and last rows for periodic boundary conditions
 ham(1,N) = coeff;   ham(1,1) = -2*coeff; ham(1,2) = coeff;
 ham(N,N-1) = coeff; ham(N,N) = -2*coeff; ham(N,1) = coeff;
-
-%Potentialbarrier
-for i = (round(N/2)+30):(round(N/2)+50)
-    ham(1,i) = U;
+for i=1:D
+    ham(i+A,i+A)=ham(i+A,i+A)+V;
 end
-
 tic;
 %* Compute the Crank-Nicolson matrix
 dCN = ( (eye(N) + .5*i_imag*tau/h_bar*ham) \ ...
              (eye(N) - .5*i_imag*tau/h_bar*ham) );	
       
 %* Initialize the wavefunction 
-x0 = 0;          % Location of the center of the wavepacket
+x0 = -30;          % Location of the center of the wavepacket
 velocity = 0.5;  % Average velocity of the packet
 k0 = mass*velocity/h_bar;       % Average wavenumber
 sigma0 = L/10;   % Standard deviation of the wavefunction
@@ -81,5 +78,6 @@ toc;
 pFinal = psi.*conj(psi);
 plot(x,p_plot(:,1:3:iplot),x,pFinal);
 xlabel('x'); ylabel('P(x,t)');
+
 title('Probability density at various times');
-end
+   

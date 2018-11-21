@@ -18,12 +18,14 @@ ham = zeros(N);  % Set all elements to zero
 coeff = -h_bar^2/(2*mass*h^2);
 for i=2:(N-1)
   ham(i,i-1) = coeff;
-  ham(i,i) = -2*coeff;  % Set interior rows
+  ham(i,i) = -2*coeff;% Set interior rows
   ham(i,i+1) = coeff;
 end
+
 % First and last rows for periodic boundary conditions
 ham(1,N) = coeff;   ham(1,1) = -2*coeff; ham(1,2) = coeff;
-ham(N,N-1) = coeff; ham(N,N) = -2*coeff; ham(N,1) = coeff;
+ham(N,N-1) = coeff; ham(N,N) = -2*coeff+U; ham(N,1) = coeff;
+
 
 %tic;
 %* Compute the Crank-Nicolson matrix
@@ -38,7 +40,6 @@ sigma0 = L/10;   % Standard deviation of the wavefunction
 Norm_psi = 1/(sqrt(sigma0*sqrt(pi)));  % Normalization
 psi = Norm_psi * exp(i_imag*k0*x') .* ...
                       exp(-(x'-x0).^2/(2*sigma0^2));
-psi(1) = U;      % Initial cond. is delta function at edge
 
 %* Plot the initial wavefunction
 figure(1); clf;
