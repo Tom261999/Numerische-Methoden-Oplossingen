@@ -37,34 +37,36 @@ sigma = L/10;
 normalisatie = 1/(sqrt(sigma*sqrt(pi)));  % Normalisatie
 psi = normalisatie*exp(1i*k0*x').*exp(-(x'-x_init).^2/(2*sigma^2));
 
-% % % %Toont de potentiaalput
-% % % figure(1); clf
-% % % hold on
-% % % g = @(t) feval(func,t)/10;
-% % % fplot(g,'b-');
-% % % title('Weergave van de potentiaalput');
-% % % 
-% % % %Loop om de verticale as vanaf 0 of de minimale waarde van de put te laten
-% % % %beginnen.
-% % % if min(feval(func,x/100))/10 < 0
-% % %     axis([-0.5 0.5 min(feval(func,x/100))/10 max(feval(func,x/100))/10]);
-% % % else
-% % %     axis([-0.5 0.5 0 max(feval(func,x/100))/10]);
-% % % end
-% % % 
-% % % fplot(0,'k:');
-% % % xlabel('x')
-% % % ylabel('Potentiaal')
-% % % legend(func2str(func))
-% % % hold off
+%Toont de potentiaalput
+figure('position',[50,50,750,750]); clf %position bepaald de plaats en afmetingen van de figuur zodat de curven duidelijk zijn en we geen deel verliezen wanneer de waarden te hoog worden.
+subplot(2,1,1)
+hold on
+g = @(t) feval(func,t);
+fplot(g,'b-');
+title('Weergave van de potentiaalput');
+
+%Loop om de verticale as vanaf 0 of de minimale waarde van de put te laten
+%beginnen.
+if min(feval(func,x/100))/10 < 0
+    axis([-0.5 0.5 min(feval(func,x/100)) max(feval(func,x/100))]);
+else
+    axis([-0.5 0.5 0 max(feval(func,x/100))]);
+end
+
+fplot(0,'k:');
+xlabel('x')
+ylabel('Potentiaal')
+legend(func2str(func))
+hold off
 
 %Initialiseer de loop en nodige plotvariabelen
 max_iter = 2*L/(v*tau);
 plot_iter = max_iter/40;          %40 curves maken
 rho(:,1) = psi.*conj(psi); %rho, de waarschijnlijkheidsdichtheid
 n = 1;
-figure(1); clf; hold on
-axisV = [-L/2 L/2 0 max(rho)]; %assenlengtes
+% figure(2); clf;
+subplot(2,1,2)
+axisV = [-L/200 L/200 0 max(rho)]; %assenlengtes
 
 %Loop
 for iter=1:max_iter
@@ -74,18 +76,16 @@ for iter=1:max_iter
     if( rem(iter,plot_iter) < 1 )
         n = n+1;
         rho(:,n) = psi.*conj(psi);
-        g = @(t) feval(func,t)/10;
-        fplot(g,'b-')
-        plot(x,rho(:,n));     % tussentijdsplot van P
-        xlabel('x (10^-^2)'); ylabel('\rho(x,t)');
+        plot(x/100,rho(:,n));     % tussentijdsplot van P
+        xlabel('x'); ylabel('\rho(x,t)');
         title(sprintf('Finished %g of %g iterations',iter,max_iter));
         axis(axisV); drawnow;
     end
 end
-hold off
+
 %plot de waarschijnlijkheden
 pFinal = psi.*conj(psi);
 plot(x,rho(:,1:3:n),x,pFinal);
-xlabel('x (10^-^2)'); ylabel('\rho(x,t)');
+xlabel('x'); ylabel('\rho(x,t)');
 title('Waarschijnlijkheidsdichtheden \rho(x,t) op verschillende tijdstippen');
 end
