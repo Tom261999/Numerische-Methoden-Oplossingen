@@ -1,4 +1,4 @@
-function sunbeammod()
+function sunbeammod2()
 
 %Speed of light in the atmosphere
 c = 1;                   % speed of light in space
@@ -47,4 +47,23 @@ hold on;
         vSegments = (v(1:end-1) + v(2:end))/2;
         T = sum( sqrt(dx^2+dy.^2) ./ vSegments );
     end
+
+
+%eerste orde
+h = dx;
+m_first = (y(2)-y(1))/(h);
+first = m_first*(x-x(1))+y(1)
+first_order = plot(x,first,'--m');
+
+%tweede orde
+m_second = (-y(3)+4*y(2)-3*y(1))/(2*h);
+second = m_second*(x-x(1))+y(1);
+second_order = plot(x,second,'--c');
+
+%axis settings
+axis([-2 10 -2 2])
+
+%legendes
+legend([first_order second_order],{'First order','Second order'},'location','southeast')
+title(legend,'Forward difference')
 end

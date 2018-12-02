@@ -1,9 +1,0 @@
-Particle traveling on a potential hill
-
--> potentiaal gegeven door willekeurige functie op bepaald domein
-	-> deeltje blijft echter wel binnen het domein -> randen hebben oneindige potentiaal
-
-
-Alternatief -> orbitalen?
-
-Kronig penny model? -> zie wikiepdia->mathematica demonstratie

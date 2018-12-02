@@ -10,8 +10,6 @@ hbar = 1;  mass = 1; % Natural units
 tau = 0.1;
 
 %Hamiltoniaan
-%Hamiltoniaan = sparse(N,N); sparse maakt het script trager omdat er
-%onvoldoende nulelementen zijn in crank.
 Hamiltoniaan = zeros(N);
 coeff = -hbar^2/(2*mass*h^2);
 for i=2:(N-1)
@@ -64,7 +62,6 @@ max_iter = 2*L/(v*tau);
 plot_iter = max_iter/40;          %40 curves maken
 rho(:,1) = psi.*conj(psi); %rho, de waarschijnlijkheidsdichtheid
 n = 1;
-% figure(2); clf;
 subplot(2,1,2)
 axisV = [-L/200 L/200 0 max(rho)]; %assenlengtes
 

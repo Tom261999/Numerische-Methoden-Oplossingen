@@ -59,7 +59,7 @@ disp('Bodem is gegeven door tan(1.5*x)')
 close all
 solution(@(x) tan(1.5*x))
 pause(3)
-%Door de onevenheid van de tangens zien we (analoog aan het resultaat voor
+Door de onevenheid van de tangens zien we (analoog aan het resultaat voor
 %de sinus) dat we een vrij zachte botsing hebben rechts en een heel harde
 %botsing links.
 

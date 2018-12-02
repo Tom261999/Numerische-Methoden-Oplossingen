@@ -1,18 +1,16 @@
-function [E,gradE] = energy(theta,J,K)
-%Theta is een vector met de staten van de dipoolmomenten weergegeven door
-%de hoek theta_i = theta(i), J de interactiesterkte en K de anistropie
-%sterkte. Merk op dat er Dirichlet randvoorwaarden gelden op gradE.
-
-N = length(theta);
-for i = 2:N-1
-    cos_verschil(i) = cos(theta(i)-theta(i+1));
-    gradE(i) = -J*sin(theta(i-1)*theta(i)) + J*sin(theta(i)-theta(i+1)) + ...
-        2*K*sin(theta(i))*cos(theta(i));
+function func2 = energy(J,K)
+    function [E,gradE] = func(theta)
+        N = length(theta);
+        E=0;
+        for i=1:N-1
+            E=E+(-J.*cos(theta(i)-theta(i+1))-K.*(cos(theta(i))^2));
+            thetaverschil(i)=theta(i)-theta(i+1);
+        end
+        gradE=-J.*([0,sin(thetaverschil)]-[sin(thetaverschil),0])+K.*sin(2*theta);
+        gradE(1)=0;
+        gradE(N)=0;
+    end
+func2=@func;
 end
-gradE(1) = 0;
-gradE(N) = 0;
-for i = 1:N
-    cos_quad(i) = (cos(theta(i))).^2;
-end
-E = -J.*sum(cos_verschil)-K.*sum(cos_quad);
-end
+%We trachten een functie van theta te maken, dus maken we een functie over
+%een functie om de functie van theta te genereren!
